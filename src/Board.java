@@ -94,7 +94,9 @@ class Board {
         changePiecePosition(position,destination);
 
         if (!Arrays.deepEquals(chessboard, preMoveGameState)) {
+            System.out.println(chessboard[destination].hasMoved);
             chessboard[destination].hasMoved = true;
+            System.out.println(chessboard[destination].hasMoved);
         }
     }
 
