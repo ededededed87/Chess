@@ -68,7 +68,7 @@ class Rook extends Piece {
             }
         }
 
-        if (!movesAlongRow) {
+        else {
             if (movingUp) {
                 for (int i = position + 8; i < destination - 8; i += 8) {
                     System.out.println(i);
