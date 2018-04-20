@@ -4,7 +4,7 @@ class Board {
 
     public static Piece[] chessboard = new Piece[64];
     private Piece[] preMoveGameState = new Piece[64];
-    private String playerToMove = "White";
+    private static String playerToMove = "White";
 
     String getPlayerToMove() {
         return playerToMove;
@@ -108,20 +108,30 @@ class Board {
 
     // Summing column and row integers gives board array index
     int positionFromReference(String reference) {
-        return getColumn(reference) + getRow(reference);
+        return getColumnFromReference(reference) + getRowReference(reference);
     }
 
     // Converts column character to int
-    private int getColumn(String reference) {
+    private int getColumnFromReference(String reference) {
         int a = (reference.toLowerCase().charAt(0));
         return ((a - 1) % 8);
     }
 
 
     // Converts ASCII character to int
-    private int getRow(String reference) {
+    private int getRowReference(String reference) {
         int a = (reference.toLowerCase().charAt(1));
         return ((a - 49) * 8);
+    }
+
+    int getRowFromPosition(int position) {
+        System.out.println(position / 8);
+        return position / 8;
+    }
+
+    int getColumnFromPosition(int position) {
+        System.out.println(position % 8);
+        return position % 8;
     }
 
     Boolean correctColourSelected(String reference){
