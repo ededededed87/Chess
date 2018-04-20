@@ -1,7 +1,7 @@
 class Piece extends Board {
 
 
-    private String colour;
+    private static String colour;
     String type;
     public boolean hasMoved = false;
 

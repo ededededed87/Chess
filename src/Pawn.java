@@ -12,10 +12,6 @@ class Pawn extends Piece {
         boolean movingStraight = (destination - position) % 8 == 0;
         boolean movingDiagonally = (destination - position) == 7 || (destination - position) == 9 || (position - destination) == 7 || (position - destination) == 9;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 16024315db0304fa09e418532fdd45f581e7afa9
         if (moveIsBlocked(position, destination)) {
             System.out.println("Blocked");
             return false;
@@ -65,11 +61,8 @@ class Pawn extends Piece {
             }
         }
         else {
-<<<<<<< HEAD
             return !(squareOccupied(destination) && !getPiece(destination).getColour().equals(getPlayerToMove()));
-=======
-            return (squareOccupied(destination) && !getPiece(destination).getColour().equals(getPlayerToMove()));
->>>>>>> 16024315db0304fa09e418532fdd45f581e7afa9
+
         }
 
 
