@@ -7,6 +7,7 @@ public class Main {
         Board board = new Board();
         board.setUpBoard();
         board.printBoard();
+        board.setPlayerToMove("White");
 
         while (true /*!board.isCheckmate()*/) {
 
@@ -18,8 +19,12 @@ public class Main {
             if (!board.correctColourSelected(selection)) {
                  continue;
             }
-            String destination = selectDestination();
 
+            String destination = selectDestination();
+            if (!isValidReference(destination)){
+                System.out.println("Invalid square reference");
+                continue;
+            }
 
             if (board.getPiece(selection).moveAllowed(board.positionFromReference(selection),board.positionFromReference(destination))) {
                 board.movePiece(selection, destination);

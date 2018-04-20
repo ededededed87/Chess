@@ -33,10 +33,8 @@ class Knight extends Piece {
     }
 
 
-    @SuppressWarnings("UnnecessaryLocalVariable")
     private boolean moveIsBlocked(int destination) {
-        boolean playersOwnPieceAtDestination = getPiece(destination).getColour().equals(getPlayerToMove());
-        return playersOwnPieceAtDestination;
+        return squareOccupied(destination) && getPiece(destination).getColour().equals(getPlayerToMove());
 
     }
 }

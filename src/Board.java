@@ -2,12 +2,23 @@ import java.util.Arrays;
 
 class Board {
 
-    public static Piece[] chessboard = new Piece[64];
+    private static Piece[] chessboard = new Piece[64];
     private Piece[] preMoveGameState = new Piece[64];
+<<<<<<< HEAD
     private static String playerToMove = "White";
+=======
+    private static String playerToMove;
+
+
+
+>>>>>>> 16024315db0304fa09e418532fdd45f581e7afa9
 
     String getPlayerToMove() {
         return playerToMove;
+    }
+
+    public void setPlayerToMove(String playerToMove) {
+        this.playerToMove = playerToMove;
     }
 
     public void setUpBoard() {
@@ -69,10 +80,12 @@ class Board {
 
     void changePlayer(){
         if (playerToMove.equals("White")) {
-            playerToMove = "Black";
+            setPlayerToMove("Black");
+            System.out.println("It is now " + playerToMove + "'s turn.");
         }
         else {
-            playerToMove = "White";
+            setPlayerToMove("White");
+            System.out.println("It is now " + playerToMove + "'s turn.");
         }
     }
 
