@@ -72,14 +72,18 @@ class Board {
     }
 
     void changePlayer(){
-        if (playerToMove.equals("White")) {
-            setPlayerToMove("Black");
-            System.out.println("It is now " + playerToMove + "'s turn.");
-        }
-        else {
-            setPlayerToMove("White");
-            System.out.println("It is now " + playerToMove + "'s turn.");
-        }
+
+        playerToMove = (playerToMove.equals("White")) ? "Black" : "White";
+        System.out.println("It is now " + playerToMove + "'s turn.");
+
+//        if (playerToMove.equals("White")) {
+//            setPlayerToMove("Black");
+//            System.out.println("It is now " + playerToMove + "'s turn.");
+//       }
+//        else {
+//            setPlayerToMove("White");
+//            System.out.println("It is now " + playerToMove + "'s turn.");
+//        }
     }
 
     Piece getPiece(String reference) {
@@ -100,9 +104,7 @@ class Board {
         changePiecePosition(position,destination);
 
         if (!Arrays.deepEquals(chessboard, preMoveGameState)) {
-            System.out.println(chessboard[destination].hasMoved);
             chessboard[destination].hasMoved = true;
-            System.out.println(chessboard[destination].hasMoved);
         }
     }
 
@@ -131,12 +133,10 @@ class Board {
     }
 
     int getRowFromPosition(int position) {
-        System.out.println(position / 8);
         return position / 8;
     }
 
     int getColumnFromPosition(int position) {
-        System.out.println(position % 8);
         return position % 8;
     }
 

@@ -7,7 +7,6 @@ public class Main {
         Board board = new Board();
         board.setUpBoard();
         board.printBoard();
-        board.setPlayerToMove("White");
 
         while (true /*!board.isCheckmate()*/) {
 
