@@ -12,7 +12,14 @@ class King extends Piece {
     @Override
     boolean moveAllowed(int position, int destination) {
 
+        boolean isInCheck = (getColour().equals("White") && positionsAttackedByBlack.contains(position)) || (getColour().equals("Black") && positionsAttackedByWhite.contains(position));
+        boolean movesIntoCheck = (getColour().equals("White") && positionsAttackedByBlack.contains(destination)) || (getColour().equals("Black") && positionsAttackedByWhite.contains(destination));
+
         if (moveIsBlocked(destination)) {
+            return false;
+        }
+
+        if (movesIntoCheck) {
             return false;
         }
 
@@ -31,8 +38,6 @@ class King extends Piece {
     }
 
     private boolean moveIsBlocked(int destination) {
-
-
         return squareOccupied(destination) && getPiece(destination).getColour().equals(getPlayerToMove());
     }
 

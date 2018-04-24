@@ -94,7 +94,6 @@ class Queen extends Piece {
         else {
             if (movingUp) {
                 for (int i = position + 8; i <= destination - 8; i += 8) {
-                    System.out.println(i);
                     if (squareOccupied(i)) {
                         return true;
                     }
@@ -146,7 +145,7 @@ class Queen extends Piece {
         if (movingDown) {
 
             if (movingRight) {
-                for (int i = position - 7; i <= destination + 7; i -= 7) {
+                for (int i = position - 7; i >= destination + 7; i -= 7) {
                     if (squareOccupied(i)) {
                         return true;
                     }
@@ -154,7 +153,7 @@ class Queen extends Piece {
             }
 
             if (movingLeft) {
-                for (int i = position - 9; i <= destination + 9; i -= 9) {
+                for (int i = position - 9; i >= destination + 9; i -= 9) {
                     if (squareOccupied(i)) {
                         return true;
                     }

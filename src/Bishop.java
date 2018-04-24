@@ -10,10 +10,9 @@ class Bishop extends Queen {
     @Override
     boolean moveAllowed(int position, int destination) {
 
-        if (moveIsBlocked(position, destination)) {
+        if (isBlockedBishopMove(position, destination)) {
             return false;
         }
-
         return canMoveAsBishop(position, destination);
     }
 }

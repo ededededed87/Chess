@@ -1,17 +1,29 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 class Board {
 
-    private static Piece[] chessboard = new Piece[64];
+    static Piece[] chessboard = new Piece[64];
     private Piece[] preMoveGameState = new Piece[64];
     private static String playerToMove = "White";
 
-    String getPlayerToMove() {
-        return playerToMove;
+    static List<Integer> positionsAttackedByWhite = new ArrayList<>();
+    static List<Integer> positionsAttackedByBlack = new ArrayList<>();
+
+    private int whiteKingsPosition = 4;
+    private int blackKingsPosition = 60;
+
+    public void setWhiteKingsPosition(int whiteKingsPosition) {
+        this.whiteKingsPosition = whiteKingsPosition;
     }
 
-    public void setPlayerToMove(String playerToMove) {
-        this.playerToMove = playerToMove;
+    public void setBlackKingsPosition(int blackKingsPosition) {
+        this.blackKingsPosition = blackKingsPosition;
+    }
+
+    String getPlayerToMove() {
+        return playerToMove;
     }
 
     public void setUpBoard() {
@@ -22,6 +34,7 @@ class Board {
         chessboard[4] = new King("White");
         chessboard[5] = new Bishop("White");
         chessboard[6] = new Knight("White");
+
         chessboard[7] = new Rook("White");
         for (int i = 8; i < 16; i++) {
             chessboard[i] = new Pawn("White");
@@ -64,26 +77,18 @@ class Board {
         for (int i = ((rowNumber - 1) * 8); i < (((rowNumber - 1) * 8) + 8); i++) {
             if (chessboard[i] != null) {
                 System.out.print(getSymbol(chessboard[i].getColourAndType()) + "|");
-            } else {
+            }
+            else {
                 System.out.print("  |");
             }
         }
         System.out.println();
     }
 
-    void changePlayer(){
+    void changePlayer() {
 
         playerToMove = (playerToMove.equals("White")) ? "Black" : "White";
         System.out.println("It is now " + playerToMove + "'s turn.");
-
-//        if (playerToMove.equals("White")) {
-//            setPlayerToMove("Black");
-//            System.out.println("It is now " + playerToMove + "'s turn.");
-//       }
-//        else {
-//            setPlayerToMove("White");
-//            System.out.println("It is now " + playerToMove + "'s turn.");
-//        }
     }
 
     Piece getPiece(String reference) {
@@ -94,18 +99,39 @@ class Board {
         return chessboard[position];
     }
 
-    void movePiece(String startReference, String endReference) {
+    int getWhiteKingsPosition() {
+        return whiteKingsPosition;
+    }
+
+    int getBlackKingsPosition() {
+        return blackKingsPosition;
+    }
+
+    boolean movePiece(String startReference, String endReference) {
 
         System.arraycopy(chessboard, 0, preMoveGameState, 0, 64);
 
         int position = positionFromReference(startReference);
         int destination = positionFromReference(endReference);
 
-        changePiecePosition(position,destination);
+        boolean checkFlag = false;
+
+        if (chessboard[position].isInCheck()) {
+            checkFlag = true;
+        }
+
+        changePiecePosition(position, destination);
+
+        if (checkFlag) {
+            System.out.println("You are in check");
+            chessboard = preMoveGameState;
+            return false;
+        }
 
         if (!Arrays.deepEquals(chessboard, preMoveGameState)) {
             chessboard[destination].hasMoved = true;
         }
+        return true;
     }
 
     private void changePiecePosition(int position, int destination) {
@@ -140,32 +166,31 @@ class Board {
         return position % 8;
     }
 
-    Boolean correctColourSelected(String reference){
+    Boolean correctColourSelected(String reference) {
         try {
-            if (chessboard[positionFromReference(reference)].getColour().equals(playerToMove)){
+            if (chessboard[positionFromReference(reference)].getColour().equals(playerToMove)) {
                 return true;
             }
             else {
                 System.out.println("That is not your piece");
                 return false;
             }
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             System.out.println("That square is empty");
             return false;
         }
 
     }
 
-    Boolean squareOccupied(int position){
+    Boolean squareOccupied(int position) {
         return chessboard[position] != null;
     }
 
-    Boolean squareOccupied(String reference){
+    Boolean squareOccupied(String reference) {
         return chessboard[positionFromReference(reference)] != null;
     }
 
-// Returns unicode symbol for each chess piece
+    // Returns unicode symbol for each chess piece
     private String getSymbol(String piece) {
 
         String[] words = piece.split(" ");
@@ -187,7 +212,8 @@ class Board {
                 default:
                     return "\u2001";
             }
-        } else {
+        }
+        else {
             switch (words[1]) {
                 case "King":
                     return "\u265A";
@@ -206,7 +232,69 @@ class Board {
             }
         }
     }
+
+    void getAllAttackedSquares() {
+        positionsAttackedByWhite.clear();
+        positionsAttackedByBlack.clear();
+        for (int i = 0; i <= 63; i++) {
+            for (int j = 0; j <= 63; j++) {
+                if (squareOccupied(i)) {
+                    if (chessboard[i].moveAllowed(i, j)) {
+                        if (chessboard[i].getColour().equals("White")) {
+                            positionsAttackedByWhite.add(j);
+                        }
+                        else {
+                            positionsAttackedByBlack.add(j);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    private boolean whiteHasAvailableMoves() {
+        for (int i = 0; i <= 63; i++) {
+            for (int j = 0; j <= 63; j++) {
+                if (squareOccupied(i)) {
+                    if (chessboard[i].getColour().equals("White")) {
+                        if (chessboard[i].moveAllowed(i, j)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean blackHasAvailableMoves() {
+        for (int i = 0; i <= 63; i++) {
+            for (int j = 0; j <= 63; j++) {
+                if (squareOccupied(i)) {
+                    if (chessboard[i].getColour().equals("Black")) {
+                        if (chessboard[i].moveAllowed(i, j)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    boolean isWhiteCheckmate() {
+        return chessboard[blackKingsPosition].isInCheck() && !blackHasAvailableMoves();
+    }
+
+    boolean isBlackCheckmate() {
+        return chessboard[whiteKingsPosition].isInCheck() && !whiteHasAvailableMoves();
+    }
+
 }
+
+
 
 
 

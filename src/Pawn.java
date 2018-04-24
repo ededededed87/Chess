@@ -13,7 +13,6 @@ class Pawn extends Piece {
         boolean movingDiagonally = (destination - position) == 7 || (destination - position) == 9 || (position - destination) == 7 || (position - destination) == 9;
 
         if (moveIsBlocked(position, destination)) {
-            System.out.println("Blocked");
             return false;
         }
 

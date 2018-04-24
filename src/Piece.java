@@ -8,6 +8,7 @@ class Piece extends Board {
 
 
 
+
     Piece(String colour) {
         this.colour = colour;
     }
@@ -32,6 +33,22 @@ class Piece extends Board {
     boolean moveIsBlocked(int position, int destination) {
         return true;
     }
+
+    boolean isInCheck() {
+
+        if (!getType().equals("King")) {
+            return false;
+        }
+
+        if (getColour().equals("White")) {
+            return positionsAttackedByBlack.contains(getWhiteKingsPosition());
+        }
+        else {
+            return positionsAttackedByWhite.contains(getBlackKingsPosition());
+        }
+    }
+
+
 
 
 }

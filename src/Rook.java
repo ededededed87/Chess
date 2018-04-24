@@ -14,11 +14,7 @@ class Rook extends Queen {
             return false;
         }
 
-        boolean staysOnSameRow = (position / 8 == destination / 8);
-        boolean stayOnSameColumn = (Math.abs(position - destination) % 8 == 0);
-        System.out.println((position != destination) && (stayOnSameColumn || staysOnSameRow));
-        return (position != destination) && (stayOnSameColumn || staysOnSameRow);
+        return canMoveAsRook(position, destination);
 
     }
-
 }

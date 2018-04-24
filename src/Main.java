@@ -8,7 +8,9 @@ public class Main {
         board.setUpBoard();
         board.printBoard();
 
-        while (true /*!board.isCheckmate()*/) {
+        while (!board.isWhiteCheckmate() && !board.isWhiteCheckmate()) {
+
+            board.getAllAttackedSquares();
 
             String selection = selectPiece();
             if (!isValidReference(selection)){
@@ -26,15 +28,29 @@ public class Main {
             }
 
             if (board.getPiece(selection).moveAllowed(board.positionFromReference(selection),board.positionFromReference(destination))) {
-                board.movePiece(selection, destination);
+                if (!board.movePiece(selection, destination)) {
+                    System.out.println("Illegal ove - Check");
+                    continue;
+                }
             }
             else {
                 System.out.println("Illegal Move");
                 continue;
             }
 
+
+
+
             board.printBoard();
             board.changePlayer();
+        }
+
+        if (board.isWhiteCheckmate()) {
+            System.out.println("White wins!");
+        }
+
+        if (board.isBlackCheckmate()) {
+            System.out.println("Black wins!");
         }
     }
 
