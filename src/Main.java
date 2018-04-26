@@ -8,9 +8,9 @@ public class Main {
         board.setUpBoard();
         board.printBoard();
 
-        while (!board.isWhiteCheckmate() && !board.isWhiteCheckmate()) {
+        while (!board.isWhiteCheckmate() && !board.isBlackCheckmate()) {
 
-            board.getAllAttackedSquares();
+            board.getAllAttackedSquares(board.chessboard,true);
 
             String selection = selectPiece();
             if (!isValidReference(selection)){

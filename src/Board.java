@@ -11,8 +11,11 @@ class Board {
     static List<Integer> positionsAttackedByWhite = new ArrayList<>();
     static List<Integer> positionsAttackedByBlack = new ArrayList<>();
 
-    private static int whiteKingsPosition = 4;
-    private static int blackKingsPosition = 60;
+    static List<Integer> temporaryPositionsAttackedByWhiteCheck = new ArrayList<>();
+    static List<Integer> temporarypositionsAttackedByBlackCheck = new ArrayList<>();
+
+    private int whiteKingsPosition = 4;
+    private int blackKingsPosition = 60;
 
     public void setWhiteKingsPosition(int whiteKingsPosition) {
         this.whiteKingsPosition = whiteKingsPosition;
@@ -77,8 +80,7 @@ class Board {
         for (int i = ((rowNumber - 1) * 8); i < (((rowNumber - 1) * 8) + 8); i++) {
             if (chessboard[i] != null) {
                 System.out.print(getSymbol(chessboard[i].getColourAndType()) + "|");
-            }
-            else {
+            } else {
                 System.out.print("  |");
             }
         }
@@ -137,6 +139,10 @@ class Board {
         if (!Arrays.deepEquals(chessboard, preMoveGameState)) {
             chessboard[destination].hasMoved = true;
         }
+
+        if (chessboard[destination].getType().equals("King")) {
+            chessboard[destination].setPosition(destination);
+        }
     }
 
     private void changePiecePosition(int position, int destination) {
@@ -175,8 +181,7 @@ class Board {
         try {
             if (chessboard[positionFromReference(reference)].getColour().equals(playerToMove)) {
                 return true;
-            }
-            else {
+            } else {
                 System.out.println("That is not your piece");
                 return false;
             }
@@ -217,8 +222,7 @@ class Board {
                 default:
                     return "\u2001";
             }
-        }
-        else {
+        } else {
             switch (words[1]) {
                 case "King":
                     return "\u265A";
@@ -238,66 +242,86 @@ class Board {
         }
     }
 
-    void getAllAttackedSquares() {
-        positionsAttackedByWhite.clear();
-        positionsAttackedByBlack.clear();
-        for (int i = 0; i <= 63; i++) {
-            for (int j = 0; j <= 63; j++) {
-                if (squareOccupied(i)) {
-                    if (i != j && chessboard[i].moveAllowed(i, j)) {
-                        if (chessboard[i].getColour().equals("White")) {
-                            positionsAttackedByWhite.add(j);
-                        }
-                        else {
-                            positionsAttackedByBlack.add(j);
-                        }
-                    }
-                }
-            }
-        }
-    }
+    void getAllAttackedSquares(Piece[] board, boolean permanent) {
 
+        if (permanent) {
 
-
-    private boolean whiteHasAvailableMoves() {
-        for (int i = 0; i <= 63; i++) {
-            for (int j = 0; j <= 63; j++) {
-                if (squareOccupied(i)) {
-                    if (i != j && chessboard[i].getColour().equals("White")) {
-                        if (chessboard[i].moveAllowed(i, j)) {
-                            return true;
+            positionsAttackedByWhite.clear();
+            positionsAttackedByBlack.clear();
+            for (int i = 0; i <= 63; i++) {
+                for (int j = 0; j <= 63; j++) {
+                    if (squareOccupied(i)) {
+                        if (i != j && chessboard[i].moveAllowed(i, j)) {
+                            if (chessboard[i].getColour().equals("White")) {
+                                positionsAttackedByWhite.add(j);
+                            } else {
+                                positionsAttackedByBlack.add(j);
+                            }
                         }
                     }
                 }
             }
         }
-        return false;
-    }
+        else {
 
-    private boolean blackHasAvailableMoves() {
-        for (int i = 0; i <= 63; i++) {
-            for (int j = 0; j <= 63; j++) {
-                if (squareOccupied(i)) {
-                    if (chessboard[i].getColour().equals("Black")) {
-                        if (chessboard[i].moveAllowed(i, j)) {
-                            return true;
+        }
+            temporaryPositionsAttackedByWhiteCheck.clear();
+            temporarypositionsAttackedByBlackCheck.clear();
+            for (int i = 0; i <= 63; i++) {
+                for (int j = 0; j <= 63; j++) {
+                    if (squareOccupied(i)) {
+                        if (i != j && board[i].moveAllowed(i, j)) {
+                            if (board[i].getColour().equals("White")) {
+                                temporaryPositionsAttackedByWhiteCheck.add(j);
+                            } else {
+                                temporarypositionsAttackedByBlackCheck.add(j);
+                            }
                         }
                     }
                 }
             }
         }
-        return false;
-    }
 
-    boolean isWhiteCheckmate() {
-        return chessboard[blackKingsPosition].isInCheck(chessboard) && !blackHasAvailableMoves();
-    }
 
-    boolean isBlackCheckmate() {
-        return chessboard[whiteKingsPosition].isInCheck(chessboard) && !whiteHasAvailableMoves();
-    }
+        private boolean whiteHasAvailableMoves () {
+            for (int i = 0; i <= 63; i++) {
+                for (int j = 0; j <= 63; j++) {
+                    if (squareOccupied(i)) {
+                        if (i != j && chessboard[i].getColour().equals("White")) {
+                            if (chessboard[i].moveAllowed(i, j)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
 
-}
+        private boolean blackHasAvailableMoves () {
+            for (int i = 0; i <= 63; i++) {
+                for (int j = 0; j <= 63; j++) {
+                    if (squareOccupied(i)) {
+                        if (chessboard[i].getColour().equals("Black")) {
+                            if (chessboard[i].moveAllowed(i, j)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        boolean isWhiteCheckmate () {
+            return chessboard[getBlackKingsPosition(chessboard)].isInCheck(chessboard) && !blackHasAvailableMoves();
+        }
+
+        boolean isBlackCheckmate () {
+            return chessboard[getBlackKingsPosition(chessboard)].isInCheck(chessboard) && !whiteHasAvailableMoves();
+        }
+
+    }
 
 
 

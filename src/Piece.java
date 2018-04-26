@@ -1,11 +1,18 @@
+import java.util.ArrayList;
+
 class Piece extends Board {
 
 
     private String colour;
     String type;
     public boolean hasMoved = false;
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     int position;
-    Piece[] afterMoveBoard = new Piece[64];
+    static Piece[] afterMoveBoard = new Piece[64];
 
 
 
@@ -51,12 +58,8 @@ class Piece extends Board {
     }
 
     boolean isInCheck(int position, Piece[] board) {
-        if (getColour().equals("White")) {
-            return positionsAttackedByBlack.contains(getWhiteKingsPosition(board));
-        }
-        else {
-            return positionsAttackedByWhite.contains(getBlackKingsPosition(board));
-        }
+
+        return chessboard[position].isInCheck(board);
     }
 
     boolean endsMoveInCheck(int position, int destination){
@@ -65,9 +68,9 @@ class Piece extends Board {
         afterMoveBoard[destination] = afterMoveBoard[position];
         afterMoveBoard[position] =  null;
 
-        boolean endsMoveInCheck = (getPlayerToMove().equals("White")) ? isInCheck(/*getWhiteKingsPosition(afterMoveBoard),*/afterMoveBoard) : isInCheck(/*getBlackKingsPosition(afterMoveBoard),*/afterMoveBoard);
+        boolean endsMoveInCheck = (getPlayerToMove().equals("White")) ? isInCheck(getWhiteKingsPosition(afterMoveBoard),afterMoveBoard) : isInCheck(getBlackKingsPosition(afterMoveBoard),afterMoveBoard);
 
-        return position != destination && endsMoveInCheck;
+        return (position != destination) && endsMoveInCheck;
     }
 
 
