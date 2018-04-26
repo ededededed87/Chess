@@ -28,10 +28,7 @@ public class Main {
             }
 
             if (board.getPiece(selection).moveAllowed(board.positionFromReference(selection),board.positionFromReference(destination))) {
-                if (!board.movePiece(selection, destination)) {
-                    System.out.println("Illegal ove - Check");
-                    continue;
-                }
+                board.movePiece(selection, destination);
             }
             else {
                 System.out.println("Illegal Move");

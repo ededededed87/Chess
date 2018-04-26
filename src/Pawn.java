@@ -16,6 +16,11 @@ class Pawn extends Piece {
             return false;
         }
 
+        if (endsMoveInCheck(position,destination)) {
+            System.out.println("You need to move out of check");
+            return false;
+        }
+
         if (movingStraight) {
             if (this.hasMoved) {
                 if (super.getColour().equals("White")) {

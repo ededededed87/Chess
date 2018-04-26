@@ -4,6 +4,8 @@ class Piece extends Board {
     private String colour;
     String type;
     public boolean hasMoved = false;
+    int position;
+    Piece[] afterMoveBoard = new Piece[64];
 
 
 
@@ -18,7 +20,7 @@ class Piece extends Board {
         return this.colour;
     }
 
-    private String getType() {
+    String getType() {
         return this.type;
     }
 
@@ -34,18 +36,38 @@ class Piece extends Board {
         return true;
     }
 
-    boolean isInCheck() {
+    boolean isInCheck(Piece[] board) {
 
         if (!getType().equals("King")) {
             return false;
         }
 
         if (getColour().equals("White")) {
-            return positionsAttackedByBlack.contains(getWhiteKingsPosition());
+            return positionsAttackedByBlack.contains(getWhiteKingsPosition(board));
         }
         else {
-            return positionsAttackedByWhite.contains(getBlackKingsPosition());
+            return positionsAttackedByWhite.contains(getBlackKingsPosition(board));
         }
+    }
+
+    boolean isInCheck(int position, Piece[] board) {
+        if (getColour().equals("White")) {
+            return positionsAttackedByBlack.contains(getWhiteKingsPosition(board));
+        }
+        else {
+            return positionsAttackedByWhite.contains(getBlackKingsPosition(board));
+        }
+    }
+
+    boolean endsMoveInCheck(int position, int destination){
+
+        System.arraycopy(chessboard, 0, afterMoveBoard, 0, 64);
+        afterMoveBoard[destination] = afterMoveBoard[position];
+        afterMoveBoard[position] =  null;
+
+        boolean endsMoveInCheck = (getPlayerToMove().equals("White")) ? isInCheck(/*getWhiteKingsPosition(afterMoveBoard),*/afterMoveBoard) : isInCheck(/*getBlackKingsPosition(afterMoveBoard),*/afterMoveBoard);
+
+        return position != destination && endsMoveInCheck;
     }
 
 

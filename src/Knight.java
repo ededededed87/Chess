@@ -14,6 +14,11 @@ class Knight extends Piece {
             return false;
         }
 
+        if (endsMoveInCheck(position,destination)) {
+            System.out.println("You need to move out of check");
+            return false;
+        }
+
         int move = Math.abs(position - destination);
         int changeInRowNumber = Math.abs((position / 8) - (destination / 8));
 

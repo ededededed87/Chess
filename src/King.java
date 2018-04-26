@@ -3,11 +3,13 @@ import java.util.ArrayList;
 class King extends Piece {
 
 
-
     King(String colour) {
         super(colour);
         super.type = "King";
+        super.position = (colour.equals("White")) ? 4 : 60;
     }
+
+
 
     @Override
     boolean moveAllowed(int position, int destination) {
@@ -19,7 +21,12 @@ class King extends Piece {
             return false;
         }
 
-        if (movesIntoCheck) {
+//        if (movesIntoCheck) {
+//            return false;
+//        }
+
+        if (endsMoveInCheck(position,destination)) {
+            System.out.println("You need to move out of check");
             return false;
         }
 

@@ -11,8 +11,8 @@ class Board {
     static List<Integer> positionsAttackedByWhite = new ArrayList<>();
     static List<Integer> positionsAttackedByBlack = new ArrayList<>();
 
-    private int whiteKingsPosition = 4;
-    private int blackKingsPosition = 60;
+    private static int whiteKingsPosition = 4;
+    private static int blackKingsPosition = 60;
 
     public void setWhiteKingsPosition(int whiteKingsPosition) {
         this.whiteKingsPosition = whiteKingsPosition;
@@ -99,39 +99,44 @@ class Board {
         return chessboard[position];
     }
 
-    int getWhiteKingsPosition() {
-        return whiteKingsPosition;
+    int getWhiteKingsPosition(Piece[] board) {
+        for (Piece piece : board) {
+            if (piece != null && piece.getType().equals("King")) {
+                if (piece.getColour().equals("White")) {
+                    return piece.position;
+                }
+            }
+        }
+        System.out.println("Shouldn't print - White");
+        return 64;
     }
 
-    int getBlackKingsPosition() {
-        return blackKingsPosition;
+    int getBlackKingsPosition(Piece[] board) {
+        for (Piece piece : board) {
+            if (piece != null && piece.getType().equals("King")) {
+                if (piece.getColour().equals("Black")) {
+                    return piece.position;
+                }
+            }
+        }
+        System.out.println("Shouldn't print - Black");
+        return 64;
     }
 
-    boolean movePiece(String startReference, String endReference) {
+    void movePiece(String startReference, String endReference) {
 
         System.arraycopy(chessboard, 0, preMoveGameState, 0, 64);
 
         int position = positionFromReference(startReference);
         int destination = positionFromReference(endReference);
 
-        boolean checkFlag = false;
-
-        if (chessboard[position].isInCheck()) {
-            checkFlag = true;
-        }
 
         changePiecePosition(position, destination);
 
-        if (checkFlag) {
-            System.out.println("You are in check");
-            chessboard = preMoveGameState;
-            return false;
-        }
 
         if (!Arrays.deepEquals(chessboard, preMoveGameState)) {
             chessboard[destination].hasMoved = true;
         }
-        return true;
     }
 
     private void changePiecePosition(int position, int destination) {
@@ -239,7 +244,7 @@ class Board {
         for (int i = 0; i <= 63; i++) {
             for (int j = 0; j <= 63; j++) {
                 if (squareOccupied(i)) {
-                    if (chessboard[i].moveAllowed(i, j)) {
+                    if (i != j && chessboard[i].moveAllowed(i, j)) {
                         if (chessboard[i].getColour().equals("White")) {
                             positionsAttackedByWhite.add(j);
                         }
@@ -258,7 +263,7 @@ class Board {
         for (int i = 0; i <= 63; i++) {
             for (int j = 0; j <= 63; j++) {
                 if (squareOccupied(i)) {
-                    if (chessboard[i].getColour().equals("White")) {
+                    if (i != j && chessboard[i].getColour().equals("White")) {
                         if (chessboard[i].moveAllowed(i, j)) {
                             return true;
                         }
@@ -285,11 +290,11 @@ class Board {
     }
 
     boolean isWhiteCheckmate() {
-        return chessboard[blackKingsPosition].isInCheck() && !blackHasAvailableMoves();
+        return chessboard[blackKingsPosition].isInCheck(chessboard) && !blackHasAvailableMoves();
     }
 
     boolean isBlackCheckmate() {
-        return chessboard[whiteKingsPosition].isInCheck() && !whiteHasAvailableMoves();
+        return chessboard[whiteKingsPosition].isInCheck(chessboard) && !whiteHasAvailableMoves();
     }
 
 }

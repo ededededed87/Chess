@@ -12,6 +12,12 @@ class Queen extends Piece {
         if (isBlocked(position, destination)) {
             return false;
         }
+
+        if (endsMoveInCheck(position,destination)) {
+            System.out.println("You need to move out of check");
+            return false;
+        }
+
         return canMoveAsBishop(position, destination) || canMoveAsRook(position, destination);
 
     }
