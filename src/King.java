@@ -45,7 +45,7 @@ class King extends Piece {
     }
 
     private boolean moveIsBlocked(int destination) {
-        return squareOccupied(destination) && getPiece(destination).getColour().equals(getPlayerToMove());
+        return squareOccupied(chessboard, destination) && getPiece(destination).getColour().equals(getPlayerToMove());
     }
 
 

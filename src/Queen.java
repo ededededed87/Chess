@@ -68,12 +68,12 @@ class Queen extends Piece {
         boolean movingDown = destination < position;
         boolean movingLeft = movingDown;
 
-        if (squareOccupied(destination) && getPiece(destination).getColour().equals(getPlayerToMove())) {
+        if (squareOccupied(chessboard,destination) && getPiece(destination).getColour().equals(getPlayerToMove())) {
             return true;
         }
 
 
-        if (squareOccupied(destination)) {
+        if (squareOccupied(chessboard,destination)) {
             if (getPiece(destination).getColour().equals(getPlayerToMove())) {
                 return true;
             }
@@ -82,7 +82,7 @@ class Queen extends Piece {
         if (movesAlongRow) {
             if (movingRight) {
                 for (int i = position + 1; i <= destination - 1; i++) {
-                    if (squareOccupied(i)) {
+                    if (squareOccupied(chessboard,i)) {
                         return true;
                     }
                 }
@@ -90,7 +90,7 @@ class Queen extends Piece {
 
             if (movingLeft) {
                 for (int i = position - 1; i >= destination - 1; i--) {
-                    if (squareOccupied(i)) {
+                    if (squareOccupied(chessboard,i)) {
                         return true;
                     }
                 }
@@ -100,7 +100,7 @@ class Queen extends Piece {
         else {
             if (movingUp) {
                 for (int i = position + 8; i <= destination - 8; i += 8) {
-                    if (squareOccupied(i)) {
+                    if (squareOccupied(chessboard,i)) {
                         return true;
                     }
                 }
@@ -108,7 +108,7 @@ class Queen extends Piece {
 
             if (movingDown) {
                 for (int i = position - 8; i >= destination + 8; i -= 8) {
-                    if (squareOccupied(i)) {
+                    if (squareOccupied(chessboard,i)) {
                         return true;
                     }
                 }
@@ -126,7 +126,7 @@ class Queen extends Piece {
         boolean movingRight = getColumnFromPosition(destination) > getColumnFromPosition(position);
         boolean movingLeft = getColumnFromPosition(destination) < getColumnFromPosition(position);
 
-        if (squareOccupied(destination) && getPiece(destination).getColour().equals(getPlayerToMove())) {
+        if (squareOccupied(chessboard,destination) && getPiece(destination).getColour().equals(getPlayerToMove())) {
             return true;
         }
 
@@ -134,14 +134,14 @@ class Queen extends Piece {
 
             if (movingRight) {
                 for (int i = position + 9; i <= destination - 9; i += 9) {
-                    if (squareOccupied(i)) {
+                    if (squareOccupied(chessboard,i)) {
                         return true;
                     }
                 }
             }
             if (movingLeft) {
                 for (int i = position + 7; i <= destination - 7; i += 7) {
-                    if (squareOccupied(i)) {
+                    if (squareOccupied(chessboard,i)) {
                         return true;
                     }
                 }
@@ -152,7 +152,7 @@ class Queen extends Piece {
 
             if (movingRight) {
                 for (int i = position - 7; i >= destination + 7; i -= 7) {
-                    if (squareOccupied(i)) {
+                    if (squareOccupied(chessboard,i)) {
                         return true;
                     }
                 }
@@ -160,7 +160,7 @@ class Queen extends Piece {
 
             if (movingLeft) {
                 for (int i = position - 9; i >= destination + 9; i -= 9) {
-                    if (squareOccupied(i)) {
+                    if (squareOccupied(chessboard,i)) {
                         return true;
                     }
                 }

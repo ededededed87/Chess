@@ -40,7 +40,7 @@ class Pawn extends Piece {
             }
         }
         else {
-            return (movingDiagonally && squareOccupied(destination));
+            return (movingDiagonally && squareOccupied(chessboard,destination));
         }
     }
 
@@ -54,18 +54,18 @@ class Pawn extends Piece {
         if (movingStraight) {
             if (movingTwoSquares) {
                 if (super.getColour().equals("White")) {
-                    return (squareOccupied(destination) || squareOccupied(destination - 8));
+                    return (squareOccupied(chessboard,destination) || squareOccupied(chessboard,destination - 8));
                 }
                 else {
-                    return (squareOccupied(destination) || squareOccupied(destination + 8));
+                    return (squareOccupied(chessboard,destination) || squareOccupied(chessboard,destination + 8));
                 }
             }
             else {
-                return squareOccupied(destination);
+                return squareOccupied(chessboard,destination);
             }
         }
         else {
-            return !(squareOccupied(destination) && !getPiece(destination).getColour().equals(getPlayerToMove()));
+            return !(squareOccupied(chessboard,destination) && !getPiece(destination).getColour().equals(getPlayerToMove()));
 
         }
 

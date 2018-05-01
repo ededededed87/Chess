@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 class Piece extends Board {
 
@@ -43,23 +44,34 @@ class Piece extends Board {
         return true;
     }
 
-    boolean isInCheck(Piece[] board) {
+    boolean isInCheck(Piece[] board, boolean permanent) {
+
+        List<Integer> whiteList = new ArrayList();
+        List<Integer> blackList = new ArrayList();
+
+
+//        if(!permanent) {
+//            getAllAttackedSquares(afterMoveBoard,false);
+//        }
+
+        whiteList = permanent ? positionsAttackedByWhite : temporaryPositionsAttackedByWhiteCheck;
+        blackList = permanent ? positionsAttackedByBlack : temporarypositionsAttackedByBlackCheck;
 
         if (!getType().equals("King")) {
             return false;
         }
 
         if (getColour().equals("White")) {
-            return positionsAttackedByBlack.contains(getWhiteKingsPosition(board));
+            return blackList.contains(getWhiteKingsPosition(board));
         }
         else {
-            return positionsAttackedByWhite.contains(getBlackKingsPosition(board));
+            return whiteList.contains(getBlackKingsPosition(board));
         }
     }
 
-    boolean isInCheck(int position, Piece[] board) {
+    boolean isInCheck(int position, Piece[] board, boolean permanent) {
 
-        return chessboard[position].isInCheck(board);
+        return chessboard[position].isInCheck(board, permanent);
     }
 
     boolean endsMoveInCheck(int position, int destination){
@@ -68,7 +80,7 @@ class Piece extends Board {
         afterMoveBoard[destination] = afterMoveBoard[position];
         afterMoveBoard[position] =  null;
 
-        boolean endsMoveInCheck = (getPlayerToMove().equals("White")) ? isInCheck(getWhiteKingsPosition(afterMoveBoard),afterMoveBoard) : isInCheck(getBlackKingsPosition(afterMoveBoard),afterMoveBoard);
+        boolean endsMoveInCheck = (getPlayerToMove().equals("White")) ? isInCheck(getWhiteKingsPosition(afterMoveBoard),afterMoveBoard,false) : isInCheck(getBlackKingsPosition(afterMoveBoard),afterMoveBoard, false);
 
         return (position != destination) && endsMoveInCheck;
     }
